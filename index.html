@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>B3A · Fu Tai Estate ↔ Shenzhen Bay Port</title>
+<title>67M · NOVO LAND ↔ Lingnan University</title>
 <style>
   :root {
     --bg: #eef1f5;
@@ -193,16 +193,16 @@
 <main class="card">
   <header>
     <div class="route-line">
-      <span class="badge">B3A</span>
-      <span class="co">Citybus · via DATA.GOV.HK</span>
+      <span class="badge">67M</span>
+      <span class="co">KMB · via DATA.GOV.HK</span>
     </div>
   </header>
 
   <section class="leg" aria-labelledby="leg-out">
     <div class="leg-head">
-      <span class="dir" id="leg-out">Fu Tai Estate <span class="arrow">→</span> Shenzhen Bay Port</span>
-      <span class="zh">富泰邨 → 深圳灣口岸</span>
-      <span class="leg-note">Departs Fu Tai Estate, Castle Peak Road</span>
+      <span class="dir" id="leg-out">NOVO LAND <span class="arrow">→</span> Lingnan University</span>
+      <span class="zh">NOVO LAND → 嶺南大學</span>
+      <span class="leg-note">Departs NOVO LAND · stop TM520 · toward Kwai Fong Station</span>
     </div>
     <ul class="board" id="board-out" aria-busy="true">
       <li class="empty"><strong>Loading…</strong><p>Fetching the next buses.</p></li>
@@ -211,9 +211,9 @@
 
   <section class="leg" aria-labelledby="leg-in">
     <div class="leg-head">
-      <span class="dir" id="leg-in">Shenzhen Bay Port <span class="arrow">→</span> Fu Tai Estate</span>
-      <span class="zh">深圳灣口岸 → 富泰邨</span>
-      <span class="leg-note">Departs Shenzhen Bay Port · stops at Fu Tai Shopping Centre, Castle Peak Road, then continues to Shan King Estate</span>
+      <span class="dir" id="leg-in">Lingnan University <span class="arrow">→</span> NOVO LAND</span>
+      <span class="zh">嶺南大學 → NOVO LAND</span>
+      <span class="leg-note">Departs Lingnan University, Castle Peak Road · stop TM251 · toward Tuen Mun (Po Tin Estate)</span>
     </div>
     <ul class="board" id="board-in" aria-busy="true">
       <li class="empty"><strong>Loading…</strong><p>Fetching the next buses.</p></li>
@@ -230,12 +230,15 @@
 (() => {
   "use strict";
 
-  // Citybus (CTB) open data, DATA.GOV.HK public transport ETA API.
-  // Outbound: stop 003261 Fu Tai Estate, Castle Peak Road → Shenzhen Bay Port.
-  // Inbound:  stop 003208 Shenzhen Bay Port → Fu Tai Estate (terminus Shan King Estate).
+  // KMB open data, DATA.GOV.HK public transport ETA API.
+  // Route 67M, service type 1.
+  // Outbound: stop TM520 NOVO LAND → Lingnan University (toward Kwai Fong Station).
+  // Inbound:  stop TM251 Lingnan University → NOVO LAND (toward Po Tin Estate).
+  const ROUTE = "67M";
+  const SERVICE_TYPE = "1";
   const LEGS = [
-    { key: "out", stop: "003261", dir: "O" },
-    { key: "in",  stop: "003208", dir: "I" }
+    { key: "out", stop: "90CFA838B3C95AE0", dir: "O" },
+    { key: "in",  stop: "E2AE7A37634C8FE5", dir: "I" }
   ];
   const REFRESH_MS = 30000;
   const MAX_ROWS = 3;
@@ -285,7 +288,7 @@
     if (!upcoming.length) {
       s.board.innerHTML = s.error
         ? '<li class="empty"><strong>Can’t reach the bus data</strong><p>Check your connection. Retrying automatically.</p></li>'
-        : '<li class="empty"><strong>No upcoming buses</strong><p>No B3A departures are being reported right now. Service may have ended for today.</p></li>';
+        : '<li class="empty"><strong>No upcoming buses</strong><p>No 67M departures are being reported right now. Service may have ended for today.</p></li>';
       return;
     }
 
@@ -332,7 +335,7 @@
     const s = state[leg.key];
     try {
       const res = await fetch(
-        "https://rt.data.gov.hk/v2/transport/citybus/eta/CTB/" + leg.stop + "/B3A",
+        "https://data.etabus.gov.hk/v1/transport/kmb/eta/" + leg.stop + "/" + ROUTE + "/" + SERVICE_TYPE,
         { cache: "no-store" }
       );
       if (!res.ok) throw new Error("HTTP " + res.status);
@@ -352,7 +355,7 @@
       s.error = false;
       s.updated = new Date();
     } catch (err) {
-      console.error("B3A ETA fetch failed (" + leg.stop + "):", err);
+      console.error(ROUTE + " ETA fetch failed (" + leg.stop + "):", err);
       s.error = true;
     }
   }
