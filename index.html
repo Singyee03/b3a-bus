@@ -6,13 +6,13 @@
 <title>67M · NOVO LAND ↔ Lingnan University</title>
 <style>
   :root {
-    --bg: #eef1f5;
+    --bg: #fdf2f6;
     --card: #ffffff;
-    --ink: #101828;
-    --muted: #667085;
-    --line: #e4e7ec;
-    --blue: #003da5;
-    --yellow: #ffd100;
+    --ink: #2b1b22;
+    --muted: #7a6470;
+    --line: #f2dde6;
+    --accent: #c2185b;
+    --accent-2: #f783ac;
     --green: #067647;
     --red: #b42318;
   }
@@ -34,7 +34,7 @@
     max-width: 520px;
     background: var(--card);
     border-radius: 22px;
-    box-shadow: 0 1px 2px rgba(16, 24, 40, .06), 0 18px 40px -16px rgba(16, 24, 40, .25);
+    box-shadow: 0 1px 2px rgba(194, 24, 91, .06), 0 18px 40px -16px rgba(194, 24, 91, .20);
     overflow: hidden;
   }
   header {
@@ -47,7 +47,7 @@
     position: absolute;
     inset: 0 auto 0 0;
     width: 5px;
-    background: var(--yellow);
+    background: var(--accent-2);
   }
   .route-line {
     display: flex;
@@ -55,7 +55,7 @@
     gap: 10px;
   }
   .badge {
-    background: var(--blue);
+    background: var(--accent);
     color: #fff;
     font-weight: 800;
     font-size: 22px;
@@ -123,7 +123,7 @@
     letter-spacing: -.03em;
     color: var(--ink);
   }
-  .bus:first-child .num { color: var(--blue); }
+  .bus:first-child .num { color: var(--accent); }
   .num.due, .num.text { font-size: 28px; letter-spacing: -.02em; }
   .unit {
     font-size: 14px;
@@ -153,7 +153,7 @@
     gap: 12px;
     padding: 14px 20px 14px 26px;
     border-top: 1px solid var(--line);
-    background: #fafbfc;
+    background: #fff6fa;
     font-size: 12.5px;
     color: var(--muted);
     min-height: 52px;
@@ -164,7 +164,7 @@
     background: var(--green);
     flex: none;
   }
-  .dot.loading { background: var(--yellow); animation: pulse 1s ease-in-out infinite; }
+  .dot.loading { background: var(--accent-2); animation: pulse 1s ease-in-out infinite; }
   .dot.error { background: var(--red); }
   @keyframes pulse { 50% { opacity: .25; } }
   button {
@@ -179,7 +179,7 @@
     border-radius: 9px;
     cursor: pointer;
   }
-  button:hover { background: #f4f6f8; }
+  button:hover { background: #fdf0f5; }
   button:active { transform: translateY(1px); }
   button:disabled { opacity: .5; cursor: default; }
   @media (prefers-reduced-motion: reduce) { .dot.loading { animation: none; } }
