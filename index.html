@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>67M · NOVO LAND ⇄ Lingnan University</title>
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='35' r='23' fill='%23ffc6da'/%3E%3Cellipse cx='32' cy='41' rx='11' ry='8.5' fill='%23f78fb3'/%3E%3Cellipse cx='28.5' cy='41' rx='1.9' ry='2.7' fill='%23b02a5c'/%3E%3Cellipse cx='35.5' cy='41' rx='1.9' ry='2.7' fill='%23b02a5c'/%3E%3Ccircle cx='23.5' cy='30' r='2.5' fill='%235a2a3a'/%3E%3Ccircle cx='40.5' cy='30' r='2.5' fill='%235a2a3a'/%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cellipse cx='32' cy='32' rx='26' ry='20' fill='%23ffc6da'/%3E%3Cellipse cx='32' cy='32' rx='15' ry='11' fill='%23f78fb3' opacity='.5'/%3E%3Cellipse cx='24.5' cy='32' rx='4' ry='6' fill='%23b02a5c'/%3E%3Cellipse cx='39.5' cy='32' rx='4' ry='6' fill='%23b02a5c'/%3E%3C/svg%3E">
 <style>
   :root {
     --bg: #fff6fa;
@@ -74,11 +74,25 @@
   /* ---------- card header ---------- */
 
   .head {
+    position: relative;
     display: flex;
     align-items: center;
     gap: 15px;
     padding-bottom: 20px;
     border-bottom: 1px dashed var(--line-strong);
+  }
+
+  /* The dashed rule curls up into a little pig tail at its right end. */
+  .head::after {
+    content: "";
+    position: absolute;
+    right: 0;
+    bottom: -15px;
+    width: 34px;
+    height: 34px;
+    transform: scaleX(-1);
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M0 14h6c4 0 7-3 7-7 0-3-3-5-6-4-2.5.8-3.5 4-1.5 6 1.7 1.7 4.5 1 5-1' stroke='%23ef7aa6' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat;
+    pointer-events: none;
   }
 
   .route {
@@ -99,14 +113,14 @@
       0 14px 26px -12px rgba(233, 75, 134, .8);
   }
 
-  .mascot {
+  .snout {
     flex: 0 0 auto;
     width: 46px;
     height: 46px;
     display: block;
   }
 
-  .mascot svg { width: 100%; height: 100%; display: block; }
+  .snout svg { width: 100%; height: 100%; display: block; }
 
   .titles { min-width: 0; flex: 1 1 auto; }
 
@@ -387,7 +401,7 @@
     body { padding: 22px 14px 18px; }
     .card { padding: 22px 18px 18px; border-radius: 24px; }
     .route { min-width: 64px; height: 46px; font-size: 22px; border-radius: 14px; }
-    .mascot { width: 38px; height: 38px; }
+    .snout { width: 38px; height: 38px; }
     .titles h1 { font-size: 16px; }
     .hero { padding: 22px 0 18px; }
     .hero-clock { font-size: 20px; }
@@ -406,18 +420,12 @@
   <!-- NOVO LAND → Lingnan University -->
   <section class="card" id="cardOut">
     <header class="head">
-      <div class="mascot" aria-hidden="true">
+      <div class="snout" aria-hidden="true">
         <svg viewBox="0 0 64 64">
-          <path d="M14 22C11 11 16 6 24 11c2 5 1 9-3 12Z" fill="#f7a8c4"></path>
-          <path d="M50 22c3-11-2-16-10-11-2 5-1 9 3 12Z" fill="#f7a8c4"></path>
-          <circle cx="32" cy="36" r="22" fill="#ffc6da"></circle>
-          <ellipse cx="16" cy="42" rx="3" ry="2.4" fill="#f7a8c4" opacity=".75"></ellipse>
-          <ellipse cx="48" cy="42" rx="3" ry="2.4" fill="#f7a8c4" opacity=".75"></ellipse>
-          <circle cx="23.5" cy="31" r="2.4" fill="#5a2a3a"></circle>
-          <circle cx="40.5" cy="31" r="2.4" fill="#5a2a3a"></circle>
-          <ellipse cx="32" cy="41" rx="10.5" ry="8" fill="#f78fb3"></ellipse>
-          <ellipse cx="28.6" cy="41" rx="1.8" ry="2.6" fill="#b02a5c"></ellipse>
-          <ellipse cx="35.4" cy="41" rx="1.8" ry="2.6" fill="#b02a5c"></ellipse>
+          <ellipse cx="32" cy="32" rx="24" ry="19" fill="#ffc6da" stroke="#f7a8c4" stroke-width="2.4"></ellipse>
+          <ellipse cx="32" cy="32" rx="15" ry="11" fill="#f78fb3" opacity=".55"></ellipse>
+          <ellipse cx="24.5" cy="32" rx="3.4" ry="6.2" fill="#b02a5c"></ellipse>
+          <ellipse cx="39.5" cy="32" rx="3.4" ry="6.2" fill="#b02a5c"></ellipse>
         </svg>
       </div>
       <div class="route" aria-hidden="true">67M</div>
@@ -457,18 +465,12 @@
   <!-- Lingnan University → NOVO LAND -->
   <section class="card" id="cardIn">
     <header class="head">
-      <div class="mascot" aria-hidden="true">
+      <div class="snout" aria-hidden="true">
         <svg viewBox="0 0 64 64">
-          <path d="M14 22C11 11 16 6 24 11c2 5 1 9-3 12Z" fill="#f7a8c4"></path>
-          <path d="M50 22c3-11-2-16-10-11-2 5-1 9 3 12Z" fill="#f7a8c4"></path>
-          <circle cx="32" cy="36" r="22" fill="#ffc6da"></circle>
-          <ellipse cx="16" cy="42" rx="3" ry="2.4" fill="#f7a8c4" opacity=".75"></ellipse>
-          <ellipse cx="48" cy="42" rx="3" ry="2.4" fill="#f7a8c4" opacity=".75"></ellipse>
-          <circle cx="23.5" cy="31" r="2.4" fill="#5a2a3a"></circle>
-          <circle cx="40.5" cy="31" r="2.4" fill="#5a2a3a"></circle>
-          <ellipse cx="32" cy="41" rx="10.5" ry="8" fill="#f78fb3"></ellipse>
-          <ellipse cx="28.6" cy="41" rx="1.8" ry="2.6" fill="#b02a5c"></ellipse>
-          <ellipse cx="35.4" cy="41" rx="1.8" ry="2.6" fill="#b02a5c"></ellipse>
+          <ellipse cx="32" cy="32" rx="24" ry="19" fill="#ffc6da" stroke="#f7a8c4" stroke-width="2.4"></ellipse>
+          <ellipse cx="32" cy="32" rx="15" ry="11" fill="#f78fb3" opacity=".55"></ellipse>
+          <ellipse cx="24.5" cy="32" rx="3.4" ry="6.2" fill="#b02a5c"></ellipse>
+          <ellipse cx="39.5" cy="32" rx="3.4" ry="6.2" fill="#b02a5c"></ellipse>
         </svg>
       </div>
       <div class="route" aria-hidden="true">67M</div>
