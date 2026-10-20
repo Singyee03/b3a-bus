@@ -1,0 +1,390 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>B3A · Fu Tai Estate ↔ Shenzhen Bay Port</title>
+<style>
+  :root {
+    --bg: #eef1f5;
+    --card: #ffffff;
+    --ink: #101828;
+    --muted: #667085;
+    --line: #e4e7ec;
+    --blue: #003da5;
+    --yellow: #ffd100;
+    --green: #067647;
+    --red: #b42318;
+  }
+  * { box-sizing: border-box; }
+  html, body { min-height: 100%; }
+  body {
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    background: radial-gradient(1200px 600px at 50% -10%, #ffffff 0%, var(--bg) 60%);
+    color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", "PingFang HK", "Noto Sans HK", sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  .card {
+    width: 100%;
+    max-width: 520px;
+    background: var(--card);
+    border-radius: 22px;
+    box-shadow: 0 1px 2px rgba(16, 24, 40, .06), 0 18px 40px -16px rgba(16, 24, 40, .25);
+    overflow: hidden;
+  }
+  header {
+    padding: 22px 26px 18px;
+    border-bottom: 1px solid var(--line);
+    position: relative;
+  }
+  header::after {
+    content: "";
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 5px;
+    background: var(--yellow);
+  }
+  .route-line {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .badge {
+    background: var(--blue);
+    color: #fff;
+    font-weight: 800;
+    font-size: 22px;
+    letter-spacing: .5px;
+    padding: 4px 12px;
+    border-radius: 8px;
+    font-variant-numeric: tabular-nums;
+  }
+  .co {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .leg {
+    border-bottom: 1px solid var(--line);
+  }
+  .leg:last-of-type { border-bottom: 0; }
+  .leg-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 4px 10px;
+    padding: 16px 26px 4px;
+  }
+  .dir {
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: -.01em;
+  }
+  .dir .arrow { color: var(--muted); font-weight: 400; margin: 0 2px; }
+  .zh {
+    font-size: 12.5px;
+    color: var(--muted);
+  }
+  .leg-note {
+    flex-basis: 100%;
+    font-size: 11.5px;
+    line-height: 1.4;
+    color: var(--muted);
+  }
+  .board {
+    list-style: none;
+    margin: 0;
+    padding: 2px 0 8px;
+  }
+  .bus {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 9px 26px;
+  }
+  .time {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    min-width: 126px;
+    font-variant-numeric: tabular-nums;
+  }
+  .num {
+    font-size: 44px;
+    line-height: 1.05;
+    font-weight: 800;
+    letter-spacing: -.03em;
+    color: var(--ink);
+  }
+  .bus:first-child .num { color: var(--blue); }
+  .num.due, .num.text { font-size: 28px; letter-spacing: -.02em; }
+  .unit {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--muted);
+  }
+  .meta { margin-left: auto; text-align: right; }
+  .clock {
+    font-size: 15.5px;
+    font-weight: 650;
+    font-variant-numeric: tabular-nums;
+  }
+  .remark {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+  .empty {
+    padding: 14px 26px 22px;
+    color: var(--muted);
+  }
+  .empty strong { display: block; color: var(--ink); font-size: 14.5px; margin-bottom: 4px; }
+  .empty p { margin: 0; font-size: 13px; line-height: 1.45; }
+  footer {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 20px 14px 26px;
+    border-top: 1px solid var(--line);
+    background: #fafbfc;
+    font-size: 12.5px;
+    color: var(--muted);
+    min-height: 52px;
+  }
+  #status { display: flex; align-items: center; gap: 8px; }
+  .dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--green);
+    flex: none;
+  }
+  .dot.loading { background: var(--yellow); animation: pulse 1s ease-in-out infinite; }
+  .dot.error { background: var(--red); }
+  @keyframes pulse { 50% { opacity: .25; } }
+  button {
+    margin-left: auto;
+    appearance: none;
+    border: 1px solid var(--line);
+    background: #fff;
+    color: var(--ink);
+    font: inherit;
+    font-weight: 600;
+    padding: 7px 14px;
+    border-radius: 9px;
+    cursor: pointer;
+  }
+  button:hover { background: #f4f6f8; }
+  button:active { transform: translateY(1px); }
+  button:disabled { opacity: .5; cursor: default; }
+  @media (prefers-reduced-motion: reduce) { .dot.loading { animation: none; } }
+  @media (max-width: 380px) {
+    .num { font-size: 38px; }
+    .time { min-width: 108px; }
+  }
+</style>
+</head>
+<body>
+<main class="card">
+  <header>
+    <div class="route-line">
+      <span class="badge">B3A</span>
+      <span class="co">Citybus · via DATA.GOV.HK</span>
+    </div>
+  </header>
+
+  <section class="leg" aria-labelledby="leg-out">
+    <div class="leg-head">
+      <span class="dir" id="leg-out">Fu Tai Estate <span class="arrow">→</span> Shenzhen Bay Port</span>
+      <span class="zh">富泰邨 → 深圳灣口岸</span>
+      <span class="leg-note">Departs Fu Tai Estate, Castle Peak Road</span>
+    </div>
+    <ul class="board" id="board-out" aria-busy="true">
+      <li class="empty"><strong>Loading…</strong><p>Fetching the next buses.</p></li>
+    </ul>
+  </section>
+
+  <section class="leg" aria-labelledby="leg-in">
+    <div class="leg-head">
+      <span class="dir" id="leg-in">Shenzhen Bay Port <span class="arrow">→</span> Fu Tai Estate</span>
+      <span class="zh">深圳灣口岸 → 富泰邨</span>
+      <span class="leg-note">Departs Shenzhen Bay Port · stops at Fu Tai Shopping Centre, Castle Peak Road, then continues to Shan King Estate</span>
+    </div>
+    <ul class="board" id="board-in" aria-busy="true">
+      <li class="empty"><strong>Loading…</strong><p>Fetching the next buses.</p></li>
+    </ul>
+  </section>
+
+  <footer>
+    <span id="status"><span class="dot loading" id="dot"></span><span id="statusText">Connecting…</span></span>
+    <button id="refresh" type="button">Refresh</button>
+  </footer>
+</main>
+
+<script>
+(() => {
+  "use strict";
+
+  // Citybus (CTB) open data, DATA.GOV.HK public transport ETA API.
+  // Outbound: stop 003261 Fu Tai Estate, Castle Peak Road → Shenzhen Bay Port.
+  // Inbound:  stop 003208 Shenzhen Bay Port → Fu Tai Estate (terminus Shan King Estate).
+  const LEGS = [
+    { key: "out", stop: "003261", dir: "O" },
+    { key: "in",  stop: "003208", dir: "I" }
+  ];
+  const REFRESH_MS = 30000;
+  const MAX_ROWS = 3;
+
+  const state = {};
+  LEGS.forEach(leg => {
+    state[leg.key] = {
+      etas: [],
+      error: false,
+      updated: null,
+      board: document.getElementById("board-" + leg.key)
+    };
+  });
+
+  const dot = document.getElementById("dot");
+  const statusText = document.getElementById("statusText");
+  const refreshBtn = document.getElementById("refresh");
+
+  let loading = false;
+
+  const hkClock = new Intl.DateTimeFormat("en-GB", {
+    hour: "2-digit", minute: "2-digit", hour12: false, timeZone: "Asia/Hong_Kong"
+  });
+
+  function timeText(iso) {
+    const d = new Date(iso);
+    return isNaN(d) ? "--:--" : hkClock.format(d);
+  }
+
+  function minutesLeft(iso) {
+    return Math.floor((new Date(iso).getTime() - Date.now()) / 60000);
+  }
+
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, c => ({
+      "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+    }[c]));
+  }
+
+  function renderLeg(leg) {
+    const s = state[leg.key];
+    const now = Date.now();
+    const upcoming = s.etas
+      .filter(e => e.eta && new Date(e.eta).getTime() > now - 60000)
+      .slice(0, MAX_ROWS);
+
+    if (!upcoming.length) {
+      s.board.innerHTML = s.error
+        ? '<li class="empty"><strong>Can’t reach the bus data</strong><p>Check your connection. Retrying automatically.</p></li>'
+        : '<li class="empty"><strong>No upcoming buses</strong><p>No B3A departures are being reported right now. Service may have ended for today.</p></li>';
+      return;
+    }
+
+    s.board.innerHTML = upcoming.map(e => {
+      const mins = minutesLeft(e.eta);
+      const due = mins <= 0;
+      const label = due ? "Due" : String(mins);
+      const remark = [e.rmk_en, e.rmk_tc].filter(Boolean).join(" · ");
+      return '<li class="bus">' +
+        '<div class="time">' +
+          '<span class="num' + (due ? " due" : "") + '">' + label + "</span>" +
+          (due ? "" : '<span class="unit">min</span>') +
+        "</div>" +
+        '<div class="meta">' +
+          '<div class="clock">' + timeText(e.eta) + "</div>" +
+          (remark ? '<div class="remark">' + escapeHtml(remark) + "</div>" : "") +
+        "</div>" +
+      "</li>";
+    }).join("");
+  }
+
+  function render() {
+    LEGS.forEach(renderLeg);
+  }
+
+  function setStatus() {
+    const all = LEGS.map(l => state[l.key]);
+    const failed = all.filter(s => s.error).length;
+    const last = all.map(s => s.updated).filter(Boolean).sort((a, b) => b - a)[0];
+
+    dot.className = "dot" + (loading ? " loading" : failed ? " error" : "");
+    if (loading) {
+      statusText.textContent = "Updating…";
+    } else if (failed === LEGS.length) {
+      statusText.textContent = "Offline — retrying every 30 s";
+    } else if (failed) {
+      statusText.textContent = "Partial data · retrying every 30 s";
+    } else if (last) {
+      statusText.textContent = "Updated " + hkClock.format(last) + " · every 30 s";
+    }
+  }
+
+  async function loadLeg(leg) {
+    const s = state[leg.key];
+    try {
+      const res = await fetch(
+        "https://rt.data.gov.hk/v2/transport/citybus/eta/CTB/" + leg.stop + "/B3A",
+        { cache: "no-store" }
+      );
+      if (!res.ok) throw new Error("HTTP " + res.status);
+      const json = await res.json();
+      const data = Array.isArray(json.data) ? json.data : [];
+
+      const seen = new Set();
+      s.etas = data
+        .filter(e => e && e.dir === leg.dir && e.eta)
+        .filter(e => {
+          if (seen.has(e.eta)) return false;
+          seen.add(e.eta);
+          return true;
+        })
+        .sort((a, b) => new Date(a.eta) - new Date(b.eta));
+
+      s.error = false;
+      s.updated = new Date();
+    } catch (err) {
+      console.error("B3A ETA fetch failed (" + leg.stop + "):", err);
+      s.error = true;
+    }
+  }
+
+  async function loadAll() {
+    if (loading) return;
+    loading = true;
+    refreshBtn.disabled = true;
+    setStatus();
+
+    await Promise.all(LEGS.map(loadLeg));
+
+    loading = false;
+    refreshBtn.disabled = false;
+    LEGS.forEach(leg => state[leg.key].board.setAttribute("aria-busy", "false"));
+    render();
+    setStatus();
+  }
+
+  refreshBtn.addEventListener("click", loadAll);
+
+  // Re-fetch when the tab comes back to the foreground if the data is stale.
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) return;
+    const newest = Math.max(0, ...LEGS.map(l => state[l.key].updated ? state[l.key].updated.getTime() : 0));
+    if (!newest || Date.now() - newest > REFRESH_MS) loadAll();
+  });
+
+  loadAll();
+  setInterval(loadAll, REFRESH_MS);
+  setInterval(render, 1000); // keep the minute countdowns live between fetches
+})();
+</script>
+</body>
+</html>
